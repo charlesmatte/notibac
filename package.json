@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "watch:css": "npx @tailwindcss/cli -i ./notibac/website/static/src/styles.css -o ./notibac/website/static/dist/styles.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}

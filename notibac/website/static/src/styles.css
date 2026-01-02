@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@source not "./tailwindcss";
+@source not "./daisyui{,*}.mjs";
+
+@plugin "./daisyui.mjs" {
+  themes: dusty-mauve --default;
+}
+
+@theme {
+  --color-dusty-mauve-50: #f3f1f3;
+  --color-dusty-mauve-100: #e7e4e6;
+  --color-dusty-mauve-200: #d0c8cd;
+  --color-dusty-mauve-300: #b8adb4;
+  --color-dusty-mauve-400: #a0929c;
+  --color-dusty-mauve-500: #887783;
+  --color-dusty-mauve-600: #6d5f69;
+  --color-dusty-mauve-700: #52474e;
+  --color-dusty-mauve-800: #372f34;
+  --color-dusty-mauve-900: #1b181a;
+  --color-dusty-mauve-950: #131112;
+}
+
+/* Custom daisyUI theme */
+@theme dusty-mauve {
+  /* Base colors - light backgrounds */
+  --color-base-100: #f3f1f3;
+  --color-base-200: #e7e4e6;
+  --color-base-300: #d0c8cd;
+  --color-base-content: #1b181a;
+
+  /* Primary - main brand color */
+  --color-primary: #6d5f69;
+  --color-primary-content: #f3f1f3;
+
+  /* Secondary - slightly lighter */
+  --color-secondary: #887783;
+  --color-secondary-content: #f3f1f3;
+
+  /* Accent - darker for emphasis */
+  --color-accent: #52474e;
+  --color-accent-content: #f3f1f3;
+
+  /* Neutral - darkest tones */
+  --color-neutral: #372f34;
+  --color-neutral-content: #e7e4e6;
+
+  /* Semantic colors */
+  --color-info: #6b9ac4;
+  --color-info-content: #131112;
+
+  --color-success: #7dab8f;
+  --color-success-content: #131112;
+
+  --color-warning: #d4a574;
+  --color-warning-content: #131112;
+
+  --color-error: #c47a7a;
+  --color-error-content: #131112;
+
+  /* Border radius */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.75rem;
+
+  /* Animation */
+  --animation-btn: 0.2s;
+  --animation-input: 0.2s;
+}

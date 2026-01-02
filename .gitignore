@@ -5,3 +5,9 @@ db.sqlite3
 *.sqlite3
 .venv/
 venv/
+
+# Node
+node_modules/
+
+# Build output
+notibac/website/static/dist/

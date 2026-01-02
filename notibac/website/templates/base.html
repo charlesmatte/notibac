@@ -1,0 +1,22 @@
+<html>
+  <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}" />
+    <title>Notibac</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    {% include "partials/header.html" %}
+
+    <div class="drawer lg:drawer-open flex-1">
+      <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content">
+        <main class="p-4">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+      <div class="drawer-side">
+        {% include "partials/drawer.html" %}
+      </div>
+    </div>
+  </body>
+</html>
