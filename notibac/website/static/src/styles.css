@@ -3,60 +3,70 @@
 @source not "./tailwindcss";
 @source not "./daisyui{,*}.mjs";
 
+@font-face {
+  font-family: "Renogare";
+  src: url("/static/website/fonts/Renogare.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 @plugin "./daisyui.mjs" {
-  themes: dusty-mauve --default;
+  themes: jungle-green --default;
 }
 
 @theme {
-  --color-dusty-mauve-50: #f3f1f3;
-  --color-dusty-mauve-100: #e7e4e6;
-  --color-dusty-mauve-200: #d0c8cd;
-  --color-dusty-mauve-300: #b8adb4;
-  --color-dusty-mauve-400: #a0929c;
-  --color-dusty-mauve-500: #887783;
-  --color-dusty-mauve-600: #6d5f69;
-  --color-dusty-mauve-700: #52474e;
-  --color-dusty-mauve-800: #372f34;
-  --color-dusty-mauve-900: #1b181a;
-  --color-dusty-mauve-950: #131112;
+  --font-sans: "Lato", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Renogare", sans-serif;
+
+  --color-jungle-green-50: #eef6f0;
+  --color-jungle-green-100: #ddeee1;
+  --color-jungle-green-200: #bbddc2;
+  --color-jungle-green-300: #99cca4;
+  --color-jungle-green-400: #77bb86;
+  --color-jungle-green-500: #55aa68;
+  --color-jungle-green-600: #448853;
+  --color-jungle-green-700: #33663e;
+  --color-jungle-green-800: #224429;
+  --color-jungle-green-900: #112215;
+  --color-jungle-green-950: #0c180f;
 }
 
 /* Custom daisyUI theme */
-@theme dusty-mauve {
+@theme jungle-green {
   /* Base colors - light backgrounds */
-  --color-base-100: #f3f1f3;
-  --color-base-200: #e7e4e6;
-  --color-base-300: #d0c8cd;
-  --color-base-content: #1b181a;
+  --color-base-100: #fafafa;
+  --color-base-200: #ddeee1;
+  --color-base-300: #bbddc2;
+  --color-base-content: #112215;
 
   /* Primary - main brand color */
-  --color-primary: #6d5f69;
-  --color-primary-content: #f3f1f3;
+  --color-primary: #448853;
+  --color-primary-content: #eef6f0;
 
   /* Secondary - slightly lighter */
-  --color-secondary: #887783;
-  --color-secondary-content: #f3f1f3;
+  --color-secondary: #55aa68;
+  --color-secondary-content: #eef6f0;
 
   /* Accent - darker for emphasis */
-  --color-accent: #52474e;
-  --color-accent-content: #f3f1f3;
+  --color-accent: #33663e;
+  --color-accent-content: #eef6f0;
 
   /* Neutral - darkest tones */
-  --color-neutral: #372f34;
-  --color-neutral-content: #e7e4e6;
+  --color-neutral: #224429;
+  --color-neutral-content: #ddeee1;
 
   /* Semantic colors */
   --color-info: #6b9ac4;
-  --color-info-content: #131112;
+  --color-info-content: #0c180f;
 
-  --color-success: #7dab8f;
-  --color-success-content: #131112;
+  --color-success: #55aa68;
+  --color-success-content: #0c180f;
 
   --color-warning: #d4a574;
-  --color-warning-content: #131112;
+  --color-warning-content: #0c180f;
 
   --color-error: #c47a7a;
-  --color-error-content: #131112;
+  --color-error-content: #0c180f;
 
   /* Border radius */
   --radius-selector: 0.5rem;
