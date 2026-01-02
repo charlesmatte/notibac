@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "watch:css": "npx @tailwindcss/cli -i ./notibac/website/static/src/styles.css -o ./notibac/website/static/dist/styles.css --watch"
+    "watch:css": "npx @tailwindcss/cli -i ./notibac/website/styles/styles.css -o ./notibac/website/static/dist/styles.css --watch"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.18",
+    "daisyui": "^5.5.14",
     "tailwindcss": "^4.1.18"
   }
 }
