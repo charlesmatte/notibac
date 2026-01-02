@@ -52,7 +52,7 @@ This launches both the Tailwind CSS watcher and the Django server. Press `Ctrl+C
 
 ### CSS Build
 
-The project uses Tailwind CSS v4. The CSS source is at `notibac/website/static/src/styles.css` and compiles to `notibac/website/static/dist/styles.css`.
+The project uses Tailwind CSS v4 with daisyUI. The CSS source is at `notibac/website/styles/styles.css` and compiles to `notibac/website/static/dist/styles.css`.
 
 **Note:** The compiled CSS in `website/static/dist/` is not tracked in git.
 
