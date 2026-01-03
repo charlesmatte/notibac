@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-center items-center py-12">
+  <div class="card bg-base-200 w-full max-w-md shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl justify-center mb-4">Créer un compte</h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-control mb-4">
+          <label class="label" for="id_email">
+            <span class="label-text">Adresse e-mail</span>
+          </label>
+          <input type="email" name="email" id="id_email"
+                 class="input input-bordered w-full"
+                 placeholder="votre@email.com" required />
+          {% if form.email.errors %}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ form.email.errors.0 }}</span>
+          </label>
+          {% endif %}
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label" for="id_password1">
+            <span class="label-text">Mot de passe</span>
+          </label>
+          <input type="password" name="password1" id="id_password1"
+                 class="input input-bordered w-full" required />
+          {% if form.password1.errors %}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ form.password1.errors.0 }}</span>
+          </label>
+          {% endif %}
+        </div>
+
+        <div class="form-control mb-6">
+          <label class="label" for="id_password2">
+            <span class="label-text">Confirmer le mot de passe</span>
+          </label>
+          <input type="password" name="password2" id="id_password2"
+                 class="input input-bordered w-full" required />
+          {% if form.password2.errors %}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ form.password2.errors.0 }}</span>
+          </label>
+          {% endif %}
+        </div>
+
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-primary w-full">Créer mon compte</button>
+        </div>
+      </form>
+
+      <div class="divider">OU</div>
+
+      <p class="text-center">
+        Déjà un compte ?
+        <a href="{% url 'account_login' %}" class="link link-primary">Se connecter</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

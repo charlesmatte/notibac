@@ -8,5 +8,21 @@
   <div class="navbar-end">
     <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
     <a href="{% url 'about' %}" class="btn btn-ghost">À Propos</a>
+    {% if user.is_authenticated %}
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost">
+        {{ user.email }}
+        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow">
+        <li><a href="{% url 'account_logout' %}">Déconnexion</a></li>
+      </ul>
+    </div>
+    {% else %}
+    <a href="{% url 'account_login' %}" class="btn btn-ghost">Connexion</a>
+    <a href="{% url 'account_signup' %}" class="btn btn-primary">Inscription</a>
+    {% endif %}
   </div>
 </div>
