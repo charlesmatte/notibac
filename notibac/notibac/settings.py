@@ -15,7 +15,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).resolve().parent.parent.parent.parent / ".env")
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,7 +146,10 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
-# Social account providers
+# Social account settings
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip intermediate "Continue" page
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Skip 3rd-party signup form
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APPS": [
