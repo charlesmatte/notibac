@@ -15,4 +15,14 @@ urlpatterns = [
         views.set_primary_phone,
         name="set_primary_phone",
     ),
+    path(
+        "account/phone/<int:phone_id>/verify/",
+        views.verify_phone,
+        name="verify_phone",
+    ),
+    path(
+        "account/phone/<int:phone_id>/resend-code/",
+        views.resend_code,
+        name="resend_code",
+    ),
 ]
