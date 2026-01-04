@@ -4,6 +4,11 @@
     <a href="{% url 'home' %}">
       <img src="{% static 'images/logo.png' %}" alt="Notibac" class="h-16 w-auto" />
     </a>
+    <div class="divider divider-horizontal mx-0"></div>
+    <div class="flex self-end gap-1.5 ml-1 mb-2.75 text-sm">
+      <span class="font-display italic text-jungle-green-500">Propulsé par</span>
+      <img src="{% static 'images/labyrinthe_logo.png' %}" alt="Labyrinthe" class="h-5 w-auto" />
+    </div>
   </div>
   <div class="navbar-end">
     <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
@@ -13,7 +18,7 @@
       <div tabindex="0" role="button" class="btn btn-ghost">
         {{ user.email }}
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
       <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow">
