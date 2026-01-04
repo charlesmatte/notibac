@@ -1,3 +1,45 @@
 {% extends "base.html" %} {% block content %}
-<h1>Welcome to Notibac</h1>
+<div class="hero min-h-[50vh]">
+  <div class="hero-content text-center">
+    <div class="max-w-lg">
+      <h1 class="text-5xl font-bold">Bienvenue sur Notibac!</h1>
+      <p class="py-6 text-lg text-base-content/70">
+        Notibac est une plateforme simple conçue pour les citoyens de la ville de Rouyn-Noranda qui aiment être notifiés lors de la collecte de bacs verts,
+        bleus et bruns.
+      </p>
+      <div class="flex gap-4 justify-center">
+        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">S'inscrire</a>
+        <a href="{% url 'account_login' %}" class="btn btn-outline btn-lg">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pt-4 pb-16 px-4">
+  <h2 class="text-2xl font-bold text-center mb-10">Comment ça fonctionne?</h2>
+  <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-2 max-w-4xl mx-auto">
+    <div class="text-center flex-1">
+      <div class="w-12 h-12 rounded-full bg-primary text-primary-content text-xl font-bold flex items-center justify-center mx-auto mb-3">1</div>
+      <p class="text-sm">Inscrivez-vous ou connectez-vous</p>
+    </div>
+    <div class="text-primary text-2xl hidden md:block">→</div>
+    <div class="text-primary text-2xl md:hidden">↓</div>
+    <div class="text-center flex-1">
+      <div class="w-12 h-12 rounded-full bg-primary text-primary-content text-xl font-bold flex items-center justify-center mx-auto mb-3">2</div>
+      <p class="text-sm">Ajoutez jusqu'à 3 numéros de téléphone</p>
+    </div>
+    <div class="text-primary text-2xl hidden md:block">→</div>
+    <div class="text-primary text-2xl md:hidden">↓</div>
+    <div class="text-center flex-1">
+      <div class="w-12 h-12 rounded-full bg-primary text-primary-content text-xl font-bold flex items-center justify-center mx-auto mb-3">3</div>
+      <p class="text-sm">Configurez une notification pour votre secteur</p>
+    </div>
+    <div class="text-primary text-2xl hidden md:block">→</div>
+    <div class="text-primary text-2xl md:hidden">↓</div>
+    <div class="text-center flex-1">
+      <div class="w-12 h-12 rounded-full bg-primary text-primary-content text-xl font-bold flex items-center justify-center mx-auto mb-3">4</div>
+      <p class="text-sm">Laissez Notibac vous envoyer un SMS au moment de chaque collecte!</p>
+    </div>
+  </div>
+</div>
 {% endblock %}
