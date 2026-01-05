@@ -1,0 +1,148 @@
+{% extends "base.html" %} {% block content %}
+<div class="flex flex-col items-center py-12">
+  <div class="w-full max-w-md px-4">
+    <h1 class="text-3xl font-bold text-center mb-8">
+      {% if notification %}Modifier la notification{% else %}Nouvelle notification{% endif %}
+    </h1>
+
+    {% if messages %} {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %} mb-6">
+      <span>{{ message }}</span>
+    </div>
+    {% endfor %} {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Calendar Selection -->
+      <div class="form-control mb-4">
+        <label class="label" for="id_calendar">
+          <span class="label-text">Secteur et calendrier</span>
+        </label>
+        <select name="calendar" id="id_calendar" class="select select-bordered w-full" required>
+          <option value="">Choisir un calendrier...</option>
+          {% for calendar in calendars %}
+          <option value="{{ calendar.pk }}" {% if notification and notification.calendar.pk == calendar.pk %}selected{% endif %}>
+            {{ calendar.sector.name }} - {% if calendar.has_compost %}Avec compost{% else %}Sans compost{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Phone Number Selection -->
+      <div class="form-control mb-4">
+        <label class="label" for="id_phone_number">
+          <span class="label-text">Numéro de téléphone</span>
+        </label>
+        <select name="phone_number" id="id_phone_number" class="select select-bordered w-full" required>
+          {% for phone in verified_phones %}
+          <option value="{{ phone.pk }}" {% if notification and notification.phone_number.pk == phone.pk %}selected{% endif %}>
+            {{ phone.phone_number }}{% if phone.is_primary %} (Principal){% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Timing -->
+      <div class="form-control mb-4">
+        <label class="label" for="id_timing">
+          <span class="label-text">Quand notifier</span>
+        </label>
+        <select name="timing" id="id_timing" class="select select-bordered w-full">
+          {% for value, label in timing_choices %}
+          <option value="{{ value }}" {% if notification and notification.timing == value %}selected{% elif not notification and value == 'day_before' %}selected{% endif %}>
+            {{ label }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Notification Time -->
+      <div class="form-control mb-4">
+        <label class="label" for="id_notification_time">
+          <span class="label-text">Heure de notification</span>
+        </label>
+        <input
+          type="time"
+          name="notification_time"
+          id="id_notification_time"
+          class="input input-bordered w-full"
+          value="{% if notification %}{{ notification.notification_time|time:'H:i' }}{% else %}18:00{% endif %}"
+          required
+        />
+      </div>
+
+      <!-- Collection Types -->
+      <div class="form-control mb-6">
+        <label class="label">
+          <span class="label-text">Types de collectes</span>
+        </label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_garbage"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_garbage %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Déchets (bac vert)</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_recycling"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_recycling %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Récupération (bac bleu)</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_compost"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_compost %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Compost (bac brun)</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_yard_waste"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_yard_waste %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Résidus verts</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_christmas_trees"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_christmas_trees %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Arbres de Noël</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="notify_bulky_waste"
+              class="checkbox checkbox-sm"
+              {% if notification %}{% if notification.notify_bulky_waste %}checked{% endif %}{% else %}checked{% endif %}
+            />
+            <span>Encombrants</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <a href="{% url 'notifications_list' %}" class="btn btn-ghost flex-1">Annuler</a>
+        <button type="submit" class="btn btn-primary flex-1">
+          {% if notification %}Enregistrer{% else %}Créer{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

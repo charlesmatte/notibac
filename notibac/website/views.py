@@ -9,10 +9,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from .models import PhoneNumber
+from .models import Calendar, NotificationPreference, PhoneNumber
 from .services import send_verification_sms
 
 MAX_PHONE_NUMBERS = 3
+MAX_NOTIFICATIONS = 5
 CODE_EXPIRATION_MINUTES = 10
 RESEND_COOLDOWN_SECONDS = 60
 
@@ -210,3 +211,178 @@ def resend_code(request, phone_id):
         messages.error(request, "Échec de l'envoi du SMS. Réessayez plus tard.")
 
     return redirect("account")
+
+
+# Notification preference views
+
+
+@login_required
+def notifications_list(request):
+    """List all notification preferences for the current user."""
+    notifications = request.user.notification_preferences.select_related(
+        "calendar__sector", "phone_number"
+    ).all()
+    context = {
+        "notifications": notifications,
+        "notification_count": notifications.count(),
+        "max_notifications": MAX_NOTIFICATIONS,
+        "can_add_notification": notifications.count() < MAX_NOTIFICATIONS,
+    }
+    return render(request, "notifications/list.html", context)
+
+
+@login_required
+def notification_add(request):
+    """Add a new notification preference."""
+    user_notifications = request.user.notification_preferences.count()
+    if user_notifications >= MAX_NOTIFICATIONS:
+        messages.error(
+            request, f"Vous ne pouvez pas ajouter plus de {MAX_NOTIFICATIONS} notifications."
+        )
+        return redirect("notifications_list")
+
+    verified_phones = request.user.phone_numbers.filter(is_verified=True)
+    if not verified_phones.exists():
+        messages.error(
+            request,
+            "Vous devez avoir au moins un numéro de téléphone vérifié pour créer une notification.",
+        )
+        return redirect("account")
+
+    if request.method == "POST":
+        return _handle_notification_form(request, verified_phones)
+
+    calendars = Calendar.objects.select_related("sector").all()
+    context = {
+        "calendars": calendars,
+        "verified_phones": verified_phones,
+        "timing_choices": NotificationPreference.TIMING_CHOICES,
+    }
+    return render(request, "notifications/form.html", context)
+
+
+@login_required
+def notification_edit(request, pk):
+    """Edit an existing notification preference."""
+    notification = get_object_or_404(
+        NotificationPreference, pk=pk, user=request.user
+    )
+
+    verified_phones = request.user.phone_numbers.filter(is_verified=True)
+    if not verified_phones.exists():
+        messages.error(
+            request,
+            "Vous devez avoir au moins un numéro de téléphone vérifié.",
+        )
+        return redirect("notifications_list")
+
+    if request.method == "POST":
+        return _handle_notification_form(request, verified_phones, notification)
+
+    calendars = Calendar.objects.select_related("sector").all()
+    context = {
+        "notification": notification,
+        "calendars": calendars,
+        "verified_phones": verified_phones,
+        "timing_choices": NotificationPreference.TIMING_CHOICES,
+    }
+    return render(request, "notifications/form.html", context)
+
+
+def _handle_notification_form(request, verified_phones, notification=None):
+    """Handle notification form submission for both add and edit."""
+    calendar_id = request.POST.get("calendar")
+    phone_id = request.POST.get("phone_number")
+    timing = request.POST.get("timing", "day_before")
+    notification_time = request.POST.get("notification_time", "18:00")
+
+    # Validate calendar
+    try:
+        calendar = Calendar.objects.get(pk=calendar_id)
+    except Calendar.DoesNotExist:
+        messages.error(request, "Calendrier invalide.")
+        return redirect("notification_add" if not notification else "notification_edit", pk=notification.pk)
+
+    # Validate phone
+    try:
+        phone = verified_phones.get(pk=phone_id)
+    except PhoneNumber.DoesNotExist:
+        messages.error(request, "Numéro de téléphone invalide.")
+        return redirect("notification_add" if not notification else "notification_edit", pk=notification.pk)
+
+    # Parse time
+    try:
+        hours, minutes = map(int, notification_time.split(":"))
+        from datetime import time
+        parsed_time = time(hours, minutes)
+    except (ValueError, TypeError):
+        messages.error(request, "Heure invalide.")
+        return redirect("notification_add" if not notification else "notification_edit", pk=notification.pk)
+
+    # Get collection type toggles
+    notify_garbage = request.POST.get("notify_garbage") == "on"
+    notify_recycling = request.POST.get("notify_recycling") == "on"
+    notify_compost = request.POST.get("notify_compost") == "on"
+    notify_yard_waste = request.POST.get("notify_yard_waste") == "on"
+    notify_christmas_trees = request.POST.get("notify_christmas_trees") == "on"
+    notify_bulky_waste = request.POST.get("notify_bulky_waste") == "on"
+
+    if notification:
+        # Update existing
+        notification.calendar = calendar
+        notification.phone_number = phone
+        notification.timing = timing
+        notification.notification_time = parsed_time
+        notification.notify_garbage = notify_garbage
+        notification.notify_recycling = notify_recycling
+        notification.notify_compost = notify_compost
+        notification.notify_yard_waste = notify_yard_waste
+        notification.notify_christmas_trees = notify_christmas_trees
+        notification.notify_bulky_waste = notify_bulky_waste
+        notification.save()
+        messages.success(request, "Notification mise à jour.")
+    else:
+        # Create new
+        NotificationPreference.objects.create(
+            user=request.user,
+            calendar=calendar,
+            phone_number=phone,
+            timing=timing,
+            notification_time=parsed_time,
+            notify_garbage=notify_garbage,
+            notify_recycling=notify_recycling,
+            notify_compost=notify_compost,
+            notify_yard_waste=notify_yard_waste,
+            notify_christmas_trees=notify_christmas_trees,
+            notify_bulky_waste=notify_bulky_waste,
+        )
+        messages.success(request, "Notification créée.")
+
+    return redirect("notifications_list")
+
+
+@login_required
+@require_POST
+def notification_delete(request, pk):
+    """Delete a notification preference."""
+    notification = get_object_or_404(
+        NotificationPreference, pk=pk, user=request.user
+    )
+    notification.delete()
+    messages.success(request, "Notification supprimée.")
+    return redirect("notifications_list")
+
+
+@login_required
+@require_POST
+def notification_toggle(request, pk):
+    """Toggle a notification's active status."""
+    notification = get_object_or_404(
+        NotificationPreference, pk=pk, user=request.user
+    )
+    notification.is_active = not notification.is_active
+    notification.save()
+
+    status = "activée" if notification.is_active else "désactivée"
+    messages.success(request, f"Notification {status}.")
+    return redirect("notifications_list")

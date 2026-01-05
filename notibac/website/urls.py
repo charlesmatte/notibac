@@ -25,4 +25,22 @@ urlpatterns = [
         views.resend_code,
         name="resend_code",
     ),
+    # Notification preferences
+    path("notifications/", views.notifications_list, name="notifications_list"),
+    path("notifications/add/", views.notification_add, name="notification_add"),
+    path(
+        "notifications/<int:pk>/edit/",
+        views.notification_edit,
+        name="notification_edit",
+    ),
+    path(
+        "notifications/<int:pk>/delete/",
+        views.notification_delete,
+        name="notification_delete",
+    ),
+    path(
+        "notifications/<int:pk>/toggle/",
+        views.notification_toggle,
+        name="notification_toggle",
+    ),
 ]
