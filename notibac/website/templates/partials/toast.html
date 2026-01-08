@@ -1,0 +1,9 @@
+{% if messages %}
+<div class="toast toast-end toast-bottom z-50">
+  {% for message in messages %}
+  <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

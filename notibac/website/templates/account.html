@@ -3,12 +3,6 @@
   <div class="w-full max-w-md px-4">
     <h1 class="text-3xl font-bold text-center mb-8">Mon Compte</h1>
 
-    {% if messages %} {% for message in messages %}
-    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %} mb-6">
-      <span>{{ message }}</span>
-    </div>
-    {% endfor %} {% endif %}
-
     <!-- Personal Info Section -->
     <section>
       <h2 class="text-lg font-semibold mb-4">Informations personnelles</h2>
