@@ -11,9 +11,9 @@
     </div>
   </div>
   <div class="navbar-end">
-    <a href="{% url 'home' %}" class="btn btn-ghost">Accueil</a>
-    <a href="{% url 'about' %}" class="btn btn-ghost">À Propos</a>
     {% if user.is_authenticated %}
+    <a href="{% url 'notifications_list' %}" class="btn btn-ghost">Mes Notifications</a>
+    <a href="{% url 'about' %}" class="btn btn-ghost">À Propos de Notibac</a>
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost">
         {{ user.email }}
