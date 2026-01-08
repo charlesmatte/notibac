@@ -28,6 +28,13 @@ class PhoneNumber(models.Model):
         unique_together = ("user", "phone_number")
         ordering = ["-is_primary", "-created_at"]
 
+    @property
+    def formatted(self):
+        """Return phone number in format: XXX-XXX-XXXX"""
+        # Phone is stored as +1XXXXXXXXXX
+        digits = self.phone_number[2:]  # Remove +1
+        return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+
     def __str__(self):
         status = "Principal" if self.is_primary else "Secondaire"
         verified = "Vérifié" if self.is_verified else "Non vérifié"
