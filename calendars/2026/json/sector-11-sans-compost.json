@@ -1,6 +1,6 @@
 {
   "sector": "11",
-  "sector_name": "Secteur 11 - Sans",
+  "sector_name": "Secteur 11",
   "year": 2026,
   "has_compost": false,
   "collections": {
@@ -63,8 +63,7 @@
     ],
     "compost": [],
     "yard_waste": [
-      "2026-05-31",
-      "2026-10-02",
+      "2026-05-29",
       "2026-10-16",
       "2026-10-30"
     ],

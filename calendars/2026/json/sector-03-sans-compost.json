@@ -1,6 +1,6 @@
 {
   "sector": "03",
-  "sector_name": "Secteur 03 - Sans",
+  "sector_name": "Secteur 03",
   "year": 2026,
   "has_compost": false,
   "collections": {
@@ -69,7 +69,7 @@
       "2026-10-30"
     ],
     "christmas_trees": [
-      "2026-01-12"
+      "2026-01-11"
     ],
     "bulky_waste": []
   }

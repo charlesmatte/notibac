@@ -90,7 +90,7 @@ def extract_sector_info(filename: str) -> dict:
         if suffix:
             sector_name += suffix
 
-        if location and location not in ["cal", "gmr"]:
+        if location and location not in ["cal", "gmr", "sans"]:
             # Capitalize location name
             loc_name = location.replace("-", " ").title()
             sector_name += f" - {loc_name}"
