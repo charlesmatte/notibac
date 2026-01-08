@@ -3,66 +3,63 @@
   <div class="w-full max-w-2xl px-4">
     <h1 class="text-3xl font-bold text-center mb-8">Mes Notifications</h1>
 
-    {% if messages %} {% for message in messages %}
-    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %} mb-6">
-      <span>{{ message }}</span>
-    </div>
-    {% endfor %} {% endif %}
-
     {% if notifications %}
     <div class="space-y-4 mb-6">
       {% for notification in notifications %}
-      <div class="card bg-base-200">
+      <div class="card bg-base-200 {% if not notification.is_active %}opacity-60{% endif %}">
+        {% if not notification.is_active %}<div class="animate-slide-down bg-error text-error-content text-center text-sm font-semibold rounded-t-box">Désactivée</div>{% endif %}
         <div class="card-body p-4">
           <div class="flex justify-between items-start gap-4">
             <div class="flex-1">
               <h3 class="font-semibold">{{ notification.calendar.sector.name }}</h3>
-              <p class="text-sm text-base-content/70">
-                {% if notification.calendar.has_compost %}Avec compost{% else %}Sans compost{% endif %}
-              </p>
+              <p class="text-sm text-base-content/70">{% if notification.calendar.has_compost %}Avec compost{% else %}Sans compost{% endif %}</p>
+              <!-- prettier-ignore -->
               <div class="flex flex-wrap gap-1 mt-2">
-                {% if notification.notify_garbage %}<span class="badge badge-sm">Déchets</span>{% endif %}
+                {% if notification.notify_garbage %}<span class="badge badge-sm bg-black text-white">Déchets</span>{% endif %}
                 {% if notification.notify_recycling %}<span class="badge badge-sm badge-info">Récupération</span>{% endif %}
                 {% if notification.notify_compost %}<span class="badge badge-sm badge-warning">Compost</span>{% endif %}
-                {% if notification.notify_yard_waste %}<span class="badge badge-sm badge-success">Résidus verts</span>{% endif %}
-                {% if notification.notify_christmas_trees %}<span class="badge badge-sm badge-accent">Arbres de Noël</span>{% endif %}
-                {% if notification.notify_bulky_waste %}<span class="badge badge-sm badge-secondary">Encombrants</span>{% endif %}
+                {% if notification.notify_yard_waste %}<span class="badge badge-sm badge-primary">Résidus verts</span>{% endif %}
+                {% if notification.notify_christmas_trees %}<span class="badge badge-sm bg-red-300 text-red-900">Arbres de Noël</span>{% endif %}
+                {% if notification.notify_bulky_waste %}<span class="badge badge-sm bg-amber-600 text-white">Encombrants</span>{% endif %}
               </div>
               <p class="text-sm mt-2">
                 <span class="text-base-content/70">{{ notification.get_timing_display }}</span>
                 <span class="font-mono">{{ notification.notification_time|time:"H:i" }}</span>
-                <span class="text-base-content/70">vers</span>
-                <span class="font-mono">{{ notification.phone_number.phone_number }}</span>
+                <span class="text-base-content/70">au</span>
+                <span class="font-mono">{{ notification.phone_number.formatted }}</span>
               </p>
             </div>
             <div class="flex flex-col gap-1">
               <form method="post" action="{% url 'notification_toggle' notification.pk %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-sm {% if notification.is_active %}btn-success{% else %}btn-ghost{% endif %}" title="{% if notification.is_active %}Désactiver{% else %}Activer{% endif %}">
-                  {% if notification.is_active %}
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                  </svg>
-                  {% else %}
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                  </svg>
-                  {% endif %}
-                </button>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-sm toggle-success"
+                  {% if notification.is_active %}checked{% endif %}
+                  title="{% if notification.is_active %}Désactiver{% else %}Activer{% endif %}"
+                  onchange="handleToggle(this)"
+                />
               </form>
               <a href="{% url 'notification_edit' notification.pk %}" class="btn btn-sm btn-ghost" title="Modifier">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
                 </svg>
               </a>
-              <form method="post" action="{% url 'notification_delete' notification.pk %}" onsubmit="return confirm('Supprimer cette notification?');">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-ghost text-error" title="Supprimer">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </form>
+              <button type="button" class="btn btn-sm btn-ghost text-error" title="Supprimer" onclick="openDeleteModal('{% url 'notification_delete' notification.pk %}')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -73,9 +70,7 @@
     <div class="text-center py-8">
       <p class="text-base-content/60 mb-4">Vous n'avez pas encore de notifications configurées.</p>
     </div>
-    {% endif %}
-
-    {% if can_add_notification %}
+    {% endif %} {% if can_add_notification %}
     <div class="text-center">
       <a href="{% url 'notification_add' %}" class="btn btn-primary">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,4 +85,46 @@
     {% endif %}
   </div>
 </div>
+
+<!-- Delete confirmation modal -->
+<dialog id="delete-modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+    <p class="py-4">Êtes-vous sûr de vouloir supprimer cette notification?</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Annuler</button>
+      </form>
+      <form id="delete-form" method="post" action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-error">Supprimer</button>
+      </form>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<script>
+  function openDeleteModal(deleteUrl) {
+    document.getElementById("delete-form").action = deleteUrl;
+    document.getElementById("delete-modal").showModal();
+  }
+
+  function handleToggle(toggle) {
+    const form = toggle.form;
+    const card = toggle.closest(".card");
+    const banner = card.querySelector(".animate-slide-down");
+
+    // If activating (toggle checked) and banner exists, animate it out first
+    if (toggle.checked && banner) {
+      banner.classList.remove("animate-slide-down");
+      banner.classList.add("animate-slide-up");
+      banner.addEventListener("animationend", () => form.submit(), { once: true });
+    } else {
+      form.submit();
+    }
+  }
+</script>
 {% endblock %}
