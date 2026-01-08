@@ -57,6 +57,46 @@
   --noise: 0;
 }
 
+@keyframes slide-down {
+  from {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 2rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    max-height: 2rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out forwards;
+  overflow: hidden;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out forwards;
+  overflow: hidden;
+}
+
 @theme {
   --font-sans: "Lato", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Renogare", sans-serif;
